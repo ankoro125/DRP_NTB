@@ -2,7 +2,7 @@ import gym
 import random
 
 ### submission information ####
-TEAM_NAME = "your_team_name" 
+TEAM_NAME = "NTB" 
 #TEAM_NAME must be the same as the name registered on the DRP website 
 #(or the team name if participating as a team).
 ##############################

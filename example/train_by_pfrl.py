@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 
 drone_num = 3
-map_name = "map_aoba01"
+map_name = "map_3x3"
 reward_list = {
     "goal": 100,
     "collision": -10,

@@ -1,6 +1,7 @@
 import gym
-from policy.policy import policy
+from example.policy_prfl import policy
 # from example.policy_prfl import policy
+# from policy.policy import policy
 
 def policy_evaluation(policy, drone_num, map_name, reward_list, start, goal, render):
     if not start or goal:
@@ -38,7 +39,7 @@ def policy_evaluation(policy, drone_num, map_name, reward_list, start, goal, ren
 
 if __name__ == "__main__":
     drone_num = 3  # the number of drones (min:2 max:30)
-    map_name = "map_aoba01"  # the map name (available maps: "map_3x3","map_aoba01","map_osaka" )
+    map_name = "map_3x3"  # the map name (available maps: "map_3x3","map_aoba01","map_osaka" )
 
     # reward_list is individual reward function where
     # "goal: 100" means one drone will obtain 100 rewards once it reach its goal.
