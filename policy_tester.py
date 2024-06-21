@@ -46,8 +46,8 @@ if __name__ == "__main__":
     # Similarly, "collision"/"wait"/"move" are rewards when a collision happens/one drone wait one step/moves one step;
     reward_list = {
         "goal": 100,
-        "collision": -10,
-        "wait": -10,
+        "collision": -50,
+        "wait": -50,
         "move": -1,
     }  # Developers can freely to alter the reward function (rewards are not used as evaluation index)
 

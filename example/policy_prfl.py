@@ -33,7 +33,7 @@ def policy(obs, env):
     # Set the discount factor that discounts future rewards.
     gamma = 0.9
     explorer = pfrl.explorers.ConstantEpsilonGreedy(
-        epsilon=0.1, random_action_func=env.action_space[0].sample)
+        epsilon=0.3, random_action_func=env.action_space[0].sample)
     # DQN uses Experience Replay.
     replay_buffer = pfrl.replay_buffers.ReplayBuffer(capacity=10 ** 6)
     phi = lambda x: np.array(x, dtype=np.float32)
