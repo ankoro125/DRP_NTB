@@ -36,7 +36,7 @@ def policy(obs, env):
             remove_node.remove(env.start_ori_array[agi])
             try:
                 H = env.G.copy() # 仮想環境
-                for node in remove_node:
+                for node in remove_node: # 自身以外のすべてのエージェントの初期位置を除外
                     H.remove_node(node)
                 paths[agi] = nx.dijkstra_path(H, env.start_ori_array[agi], env.goal_array[agi], weight='weight')
                 paths_length[agi] = nx.dijkstra_path_length(H, env.start_ori_array[agi], env.goal_array[agi], weight='weight')
@@ -46,11 +46,11 @@ def policy(obs, env):
                 paths_length[agi] = float('inf')
             remove_node.append(env.start_ori_array[agi])
         
-        assigned_agent = []
-        copy_agent = []
-
 #######################################
 #最短距離のエージェント摘出 & ルート確定
+
+        assigned_agent = []
+        copy_agent = []
 
         while len(assigned_agent) < env.agent_num:
             # パスの長さを元にエージェントをソート
