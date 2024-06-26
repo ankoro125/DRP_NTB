@@ -14,7 +14,6 @@ H = nx.Graph()
 remove_node = []
 assigned_agent = []
 copy_agent = []
-goal_agent = []
 
 def policy(obs, env):
     global assigned_agent, keys_with_single_element_list
@@ -24,6 +23,10 @@ def policy(obs, env):
     pos_list = env.get_pos_list()  # エージェントの現在情報を取得
     print('pos_list:', pos_list)
     pos_values = [item['pos'] for item in pos_list] # エージェントの現在位置を保存
+
+#######################################
+#各エージェント最短ルート計算
+
     if pos_values == env.start_ori_array:  # エージェントが初期位置にいる場合
         remove_node.clear()
         for agi in range(env.agent_num):
@@ -46,6 +49,9 @@ def policy(obs, env):
         assigned_agent = []
         copy_agent = []
 
+#######################################
+#最短距離のエージェント摘出 & ルート確定
+
         while len(assigned_agent) < env.agent_num:
             # パスの長さを元にエージェントをソート
             paths_length_list = list(paths_length.items())
@@ -67,7 +73,8 @@ def policy(obs, env):
             assigned_agent.append(selected_agent)
             copy_agent.append(selected_agent)
             
-            
+#######################################
+#他エージェントのルート確定
 
             # 他のエージェントの経路を再計算
             for agi in range(env.agent_num):
@@ -88,6 +95,9 @@ def policy(obs, env):
                     paths[agi] = [env.start_ori_array[agi]]
                     paths_length[agi] = float('inf')
                     remove_node.append(env.start_ori_array[agi])
+
+#######################################
+#実行
         
     # アクションを決定
     for agi in range(env.agent_num):
