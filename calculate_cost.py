@@ -7,7 +7,7 @@ import policy.policy as submitted
 import problem.problems as problems
 
 ### Parameters
-TEST_EPI_NUM = 10
+TEST_EPI_NUM = 1
 ###############
 
 

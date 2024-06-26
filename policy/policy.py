@@ -31,17 +31,16 @@ def policy(obs, env):
             # エージェントごとに最短経路とその長さを計算
             remove_node.remove(env.start_ori_array[agi])
             try:
-                H = env.G.copy()
+                H = env.G.copy() # 仮想環境
                 for node in remove_node:
                     H.remove_node(node)
                 paths[agi] = nx.dijkstra_path(H, env.start_ori_array[agi], env.goal_array[agi], weight='weight')
                 paths_length[agi] = nx.dijkstra_path_length(H, env.start_ori_array[agi], env.goal_array[agi], weight='weight')
-                remove_node.append(env.start_ori_array[agi])
             except nx.NetworkXNoPath:
                 # 経路が見つからなかった場合、初期位置にとどまる
                 paths[agi] = [env.start_ori_array[agi]]
                 paths_length[agi] = float('inf')
-                remove_node.append(env.start_ori_array[agi])
+            remove_node.append(env.start_ori_array[agi])
         
         assigned_agent = []
         copy_agent = []
