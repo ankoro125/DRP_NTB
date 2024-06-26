@@ -14,6 +14,7 @@ H = nx.Graph()
 remove_node = []
 assigned_agent = []
 copy_agent = []
+goal_agent = []
 
 def policy(obs, env):
     global assigned_agent, keys_with_single_element_list
