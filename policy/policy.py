@@ -46,11 +46,13 @@ def policy(obs, env):
                 paths_length[agi] = float('inf')
             remove_node.append(env.start_ori_array[agi])
         
-#######################################
-#最短距離のエージェント摘出 & ルート確定
 
         assigned_agent = []
         copy_agent = []
+
+
+#######################################
+#最短距離のエージェント摘出 & ルート確定
 
         while len(assigned_agent) < env.agent_num:
             # パスの長さを元にエージェントをソート
@@ -82,7 +84,6 @@ def policy(obs, env):
                     continue
                 try:
                     if env.start_ori_array[agi] in remove_node:
-                        
                         remove_node.remove(env.start_ori_array[agi])
                     H = env.G.copy()  # 仮想環境            
                     for node in remove_node:
