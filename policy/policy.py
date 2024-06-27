@@ -3,7 +3,7 @@ import networkx as nx
 import random
 
 ### submission information ####
-TEAM_NAME = "DRP_NTB" 
+TEAM_NAME = "DRP_NTB_3" 
 #TEAM_NAME must be the same as the name registered on the DRP website 
 #(or the team name if participating as a team).
 ##############################
@@ -24,8 +24,8 @@ def policy(obs, env):
     print('pos_list:', pos_list)
     pos_values = [item['pos'] for item in pos_list] # エージェントの現在位置を保存
 
-#######################################
-#各エージェント最短ルート計算
+    #######################################
+    #各エージェント最短ルート計算
 
     if pos_values == env.start_ori_array:  # エージェントが初期位置にいる場合
         remove_node.clear()
@@ -50,9 +50,8 @@ def policy(obs, env):
         assigned_agent = []
         copy_agent = []
 
-
-#######################################
-#最短距離のエージェント摘出 & ルート確定
+        #######################################
+        #最短距離のエージェント摘出 & ルート確定
 
         while len(assigned_agent) < env.agent_num:
             # パスの長さを元にエージェントをソート
@@ -70,13 +69,15 @@ def policy(obs, env):
             if env.start_ori_array[selected_agent] in remove_node:
                 remove_node.remove(env.start_ori_array[selected_agent])
             remove_node.append(paths[selected_agent][-1])
+            #remove_node.append(env.goal_array[selected_agent])
             
             # 選択したエージェントの経路を確定
             assigned_agent.append(selected_agent)
             copy_agent.append(selected_agent)
             
-#######################################
-#他エージェントのルート確定
+
+            #######################################
+            #他エージェントのルート確定
 
             # 他のエージェントの経路を再計算
             for agi in range(env.agent_num):
@@ -96,13 +97,13 @@ def policy(obs, env):
                     paths[agi] = [env.start_ori_array[agi]]
                     paths_length[agi] = float('inf')
                     remove_node.append(env.start_ori_array[agi])
+                    
 
-#######################################
-#実行
+    #######################################
+    #実行
         
     # アクションを決定
     for agi in range(env.agent_num):
-        count = 0
         # 現在位置を経路から削除
         if pos_list[agi]['pos'] in paths[agi]:
             paths[agi].remove(pos_list[agi]['pos'])
@@ -116,22 +117,23 @@ def policy(obs, env):
             else:
                 actions.append(paths[agi][0])
 
-        else:
+        elif env.agent_num <= 8:
             # 優先順位２～４位のアクションを決定
             if (len(assigned_agent) > 1 and agi == assigned_agent[1]) or (len(assigned_agent) > 2 and agi == assigned_agent[2]) or (len(assigned_agent) > 3 and agi == assigned_agent[3]):
+                count = 0
                 for i in copy_agent:
                     if agi == i or len(paths[agi]) == 0:
                         break
-                    else:
+                    elif 'current_goal' in pos_list[i]:
                         # 現在位置が優先順位１～位のエージェントのゴール地点の場合、道を譲る
-                        if 'current_goal' in pos_list[i] and pos_list[agi]['pos'] == pos_list[i]['current_goal']:
+                        if pos_list[agi]['pos'] == pos_list[i]['current_goal']:
                             _, avail_actions = env.get_avail_agent_actions(agi,env.n_actions)
                             if avail_actions:
                                 action = random.choice(avail_actions)
                                 paths[agi].insert(0, action)
                                 paths[agi].insert(1, pos_list[agi]['pos'])
                         # 次の経路が優先順位１～位のエージェントの現在位置もしくはゴール地点の場合、現在の位置にとどまる
-                        elif 'current_goal' in pos_list[i] and (paths[agi][0] == pos_list[i]['current_goal'] or paths[agi][0] == pos_list[i]['pos']):
+                        elif paths[agi][0] == pos_list[i]['current_goal'] or paths[agi][0] == pos_list[i]['pos']:
                             pos_value = str(pos_list[agi]['pos'])
                             if len(pos_value) <= 2:
                                 actions.append(pos_list[agi]['pos'])
@@ -144,6 +146,41 @@ def policy(obs, env):
                         actions.append(paths[agi][0])
                     else:
                         actions.append(pos_list[agi]['pos'])
+
+            else:
+                # 優先順位５位以降は現在位置にとどまる
+                actions.append(pos_list[agi]['pos'])
+            
+        else:
+            # 優先順位２～５位のアクションを決定
+            if (len(assigned_agent) > 1 and agi == assigned_agent[1]) or (len(assigned_agent) > 2 and agi == assigned_agent[2]) or (len(assigned_agent) > 3 and agi == assigned_agent[3]) or (len(assigned_agent) > 4 and agi == assigned_agent[4]):
+                count = 0
+                for i in copy_agent:
+                    if agi == i or len(paths[agi]) == 0:
+                        break
+                    elif 'current_goal' in pos_list[i]:
+                        # 現在位置が優先順位１～位のエージェントのゴール地点の場合、道を譲る
+                        if pos_list[agi]['pos'] == pos_list[i]['current_goal']:
+                            _, avail_actions = env.get_avail_agent_actions(agi,env.n_actions)
+                            if avail_actions:
+                                action = random.choice(avail_actions)
+                                paths[agi].insert(0, action)
+                                paths[agi].insert(1, pos_list[agi]['pos'])
+                        # 次の経路が優先順位１～位のエージェントの現在位置もしくはゴール地点の場合、現在の位置にとどまる
+                        elif paths[agi][0] == pos_list[i]['current_goal'] or paths[agi][0] == pos_list[i]['pos']:
+                            pos_value = str(pos_list[agi]['pos'])
+                            if len(pos_value) <= 2:
+                                actions.append(pos_list[agi]['pos'])
+                                count += 1
+                            else:
+                                actions.append(pos_list[agi]['current_start'])
+                                count += 1
+                if count == 0:  
+                    if len(paths[agi]) != 0:
+                        actions.append(paths[agi][0])
+                    else:
+                        actions.append(pos_list[agi]['pos'])
+
             else:
                 # 優先順位５位以降は現在位置にとどまる
                 actions.append(pos_list[agi]['pos'])
