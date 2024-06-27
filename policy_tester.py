@@ -52,8 +52,8 @@ if __name__ == "__main__":
     }  # Developers can freely to alter the reward function (rewards are not used as evaluation index)
 
     # If the start and goal are empty lists, they are randomly selected.
-    start = [1, 2, 0, 4, 16, 12,]  # drone1's start: node 0;  drone2's start: node 2;  drone3's start: node 4;
-    goal = [10, 13, 17, 14, 7, 5,]  # drone1's goal: node 3;  drone2's goal: node 6;  drone3's goal: node 1;
+    start = [14, 4, 11, 7, 13, 16]  # drone1's start: node 0;  drone2's start: node 2;  drone3's start: node 4;
+    goal = [12, 5, 0, 2, 1, 10]  # drone1's goal: node 3;  drone2's goal: node 6;  drone3's goal: node 1;
     render = True  # Choose whether to visualize
 
     """

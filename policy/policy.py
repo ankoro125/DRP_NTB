@@ -106,6 +106,7 @@ def policy(obs, env):
         # 現在位置を経路から削除
         if pos_list[agi]['pos'] in paths[agi]:
             paths[agi].remove(pos_list[agi]['pos'])
+        
         # 優先順位１位のアクションを決定
         if len(assigned_agent) != 0 and agi == assigned_agent[0]:
             if len(paths[agi]) == 0:
@@ -114,22 +115,22 @@ def policy(obs, env):
                 assigned_agent.pop(0)
             else:
                 actions.append(paths[agi][0])
-                
+
         else:
-            # 優先順位２位のアクションを決定
-            if len(assigned_agent) > 1 and agi == assigned_agent[1]:
+            # 優先順位２～４位のアクションを決定
+            if (len(assigned_agent) > 1 and agi == assigned_agent[1]) or (len(assigned_agent) > 2 and agi == assigned_agent[2]) or (len(assigned_agent) > 3 and agi == assigned_agent[3]):
                 for i in copy_agent:
                     if agi == i or len(paths[agi]) == 0:
                         break
                     else:
-                        # 現在位置が優先順位１位のエージェントのゴール地点の場合、道を譲る
+                        # 現在位置が優先順位１～位のエージェントのゴール地点の場合、道を譲る
                         if 'current_goal' in pos_list[i] and pos_list[agi]['pos'] == pos_list[i]['current_goal']:
                             _, avail_actions = env.get_avail_agent_actions(agi,env.n_actions)
                             if avail_actions:
                                 action = random.choice(avail_actions)
                                 paths[agi].insert(0, action)
                                 paths[agi].insert(1, pos_list[agi]['pos'])
-                        # 次の経路が優先順位１位のエージェントの現在位置もしくはゴール地点の場合、現在の位置にとどまる
+                        # 次の経路が優先順位１～位のエージェントの現在位置もしくはゴール地点の場合、現在の位置にとどまる
                         elif 'current_goal' in pos_list[i] and (paths[agi][0] == pos_list[i]['current_goal'] or paths[agi][0] == pos_list[i]['pos']):
                             pos_value = str(pos_list[agi]['pos'])
                             if len(pos_value) <= 2:
@@ -143,63 +144,6 @@ def policy(obs, env):
                         actions.append(paths[agi][0])
                     else:
                         actions.append(pos_list[agi]['pos'])
-                        
-            # 優先順位３位のアクションを決定
-            elif len(assigned_agent) > 2 and agi == assigned_agent[2]:               
-                for i in copy_agent:
-                    if agi == i or len(paths[agi]) == 0:
-                        break
-                    else:
-                        # 現在位置が優先順位１,２位のエージェントのゴール地点の場合、道を譲る
-                        if 'current_goal' in pos_list[i] and pos_list[agi]['pos'] == pos_list[i]['current_goal']:
-                            _, avail_actions = env.get_avail_agent_actions(agi,env.n_actions)
-                            if avail_actions:
-                                action = random.choice(avail_actions)
-                                paths[agi].insert(0, action)
-                                paths[agi].insert(1, pos_list[agi]['pos'])
-                        # 次の経路が優先順位１,２位のエージェントの現在位置もしくはゴール地点の場合、現在の位置にとどまる
-                        elif 'current_goal' in pos_list[i] and (paths[agi][0] == pos_list[i]['current_goal'] or paths[agi][0] == pos_list[i]['pos']):
-                            pos_value = str(pos_list[agi]['pos'])
-                            if len(pos_value) <= 2:
-                                actions.append(pos_list[agi]['pos'])
-                                count += 1
-                            else:
-                                actions.append(pos_list[agi]['current_start'])
-                                count += 1
-                if count == 0:  
-                    if len(paths[agi]) != 0:
-                        actions.append(paths[agi][0])
-                    else:
-                        actions.append(pos_list[agi]['pos'])
-
-            # 優先順位４位のアクションを決定
-            elif len(assigned_agent) > 3 and agi == assigned_agent[3]:               
-                for i in copy_agent:
-                    if agi == i or len(paths[agi]) == 0:
-                        break
-                    else:
-                        # 現在位置が優先順位１,２,３位のエージェントのゴール地点の場合、道を譲る
-                        if 'current_goal' in pos_list[i] and pos_list[agi]['pos'] == pos_list[i]['current_goal']:
-                            _, avail_actions = env.get_avail_agent_actions(agi,env.n_actions)
-                            if avail_actions:
-                                action = random.choice(avail_actions)
-                                paths[agi].insert(0, action)
-                                paths[agi].insert(1, pos_list[agi]['pos'])
-                        # 次の経路が優先順位１,２,３位のエージェントの現在位置もしくはゴール地点の場合、現在の位置にとどまる
-                        elif 'current_goal' in pos_list[i] and (paths[agi][0] == pos_list[i]['current_goal'] or paths[agi][0] == pos_list[i]['pos']):
-                            pos_value = str(pos_list[agi]['pos'])
-                            if len(pos_value) <= 2:
-                                actions.append(pos_list[agi]['pos'])
-                                count += 1
-                            else:
-                                actions.append(pos_list[agi]['current_start'])
-                                count += 1
-                if count == 0:  
-                    if len(paths[agi]) != 0:
-                        actions.append(paths[agi][0])
-                    else:
-                        actions.append(pos_list[agi]['pos'])
-
             else:
                 # 優先順位５位以降は現在位置にとどまる
                 actions.append(pos_list[agi]['pos'])
