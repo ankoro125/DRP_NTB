@@ -117,7 +117,7 @@ def policy(obs, env):
             else:
                 actions.append(paths[agi][0])
 
-        elif env.agent_num <= 8:
+        elif env.agent_num == 8:
             # 優先順位２～４位のアクションを決定
             if (len(assigned_agent) > 1 and agi == assigned_agent[1]) or (len(assigned_agent) > 2 and agi == assigned_agent[2]) or (len(assigned_agent) > 3 and agi == assigned_agent[3]):
                 count = 0
@@ -146,12 +146,12 @@ def policy(obs, env):
                         actions.append(paths[agi][0])
                     else:
                         actions.append(pos_list[agi]['pos'])
-
+                        
             else:
                 # 優先順位５位以降は現在位置にとどまる
                 actions.append(pos_list[agi]['pos'])
             
-        else:
+        elif env.agent_num == 8:
             # 優先順位２～５位のアクションを決定
             if (len(assigned_agent) > 1 and agi == assigned_agent[1]) or (len(assigned_agent) > 2 and agi == assigned_agent[2]) or (len(assigned_agent) > 3 and agi == assigned_agent[3]) or (len(assigned_agent) > 4 and agi == assigned_agent[4]):
                 count = 0
