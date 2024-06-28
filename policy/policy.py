@@ -25,7 +25,7 @@ def policy(obs, env):
     pos_values = [item['pos'] for item in pos_list] # エージェントの現在位置を保存
 
     #######################################
-    #各エージェント最短ルート計算
+    # 各エージェント最短ルート計算
 
     if pos_values == env.start_ori_array:  # エージェントが初期位置にいる場合
         remove_node.clear()
@@ -51,7 +51,7 @@ def policy(obs, env):
         copy_agent = []
 
         #######################################
-        #最短距離のエージェント摘出 & ルート確定
+        # 最短距離のエージェント摘出 & ルート確定
 
         while len(assigned_agent) < env.agent_num:
             # パスの長さを元にエージェントをソート
@@ -77,7 +77,7 @@ def policy(obs, env):
             
 
             #######################################
-            #他エージェントのルート確定
+            # 他エージェントのルート確定
 
             # 他のエージェントの経路を再計算
             for agi in range(env.agent_num):
@@ -146,12 +146,12 @@ def policy(obs, env):
                         actions.append(paths[agi][0])
                     else:
                         actions.append(pos_list[agi]['pos'])
-                        
+
             else:
                 # 優先順位５位以降は現在位置にとどまる
                 actions.append(pos_list[agi]['pos'])
             
-        elif env.agent_num == 8:
+        elif env.agent_num != 8:
             # 優先順位２～５位のアクションを決定
             if (len(assigned_agent) > 1 and agi == assigned_agent[1]) or (len(assigned_agent) > 2 and agi == assigned_agent[2]) or (len(assigned_agent) > 3 and agi == assigned_agent[3]) or (len(assigned_agent) > 4 and agi == assigned_agent[4]):
                 count = 0
