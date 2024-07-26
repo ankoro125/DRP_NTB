@@ -1,8 +1,0 @@
-調整案
-・既に通過したルートを順次解放, 同時移動エージェント数制限緩和
-
-開発案
-・policy_prfl 拡張
-・Independent learners → Joint-learners
-・衝突回数の多い地点でのカウントアップ, 限定的 Joint-learners は可能か
-・クラスタリングによる計算量緩和( ３体/１範囲 位が妥当か)
